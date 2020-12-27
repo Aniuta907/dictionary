@@ -1,0 +1,32 @@
+doctype html
+head
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.6.5/dist/css/uikit.min.css")
+    title= title
+div.container.uk-flex.uk-flex-column
+    h1(class="uk-text-warning") Данный термин отсутствует в словаре
+    form(id="form"  class="uk-width-1-3 uk-flex uk-flex-column" enctype="multipart/form-data")
+        div.uk-margin-small
+            input(type='text' class="uk-input" name="name" placeholder='Введите термин')
+        div.uk-margin-small
+            textarea(placeholder='Введите определение' name="value" class="uk-textarea")
+        div.uk-margin-small
+        button.uk-button.uk-button-default Сохранить
+script.
+    const form = document.querySelector('#form')
+    form.addEventListener('submit', function (evt) {
+        evt.preventDefault()
+        const name = document.querySelector('input[name="name"]').value
+        const value = document.querySelector('textarea').value
+        const data = JSON.stringify({name, value})
+        fetch('/add-word', {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(function (result) {
+            return result.text()
+        }).then(function (data) {
+            console.log(data);
+        })
+    })
